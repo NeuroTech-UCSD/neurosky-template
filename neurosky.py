@@ -28,10 +28,11 @@ NUM_TRIALS = 2 # number of trials in total
 SAMPLING_FREQUENCY = 128 # Hz
 INTER_TRIAL_INTERVAL = 1000 # ms, between trials
 
-TARGETS = {0:'rest'}  # classication labels, eg. {1:'task1', 2:'task2'}
-                      # NOTE: 0 is reserverd for 'rest'. Unless you just
-                      # want to record 'rest' for the entire session, you
-                      # should not include the key 0 in this dictionary
+TARGETS = {1:'task1', 2:'task2'}  
+                    # classication labels, eg. {1:'task1', 2:'task2'}
+                    # NOTE: 0 is reserverd for 'rest'. Unless you just
+                    # want to record 'rest' for the entire session, you
+                    # should not include the key 0 in this dictionary
 
 ### PATHS
 BASE_PATH = "./"
@@ -47,12 +48,20 @@ def on_raw(headset, rawvalue):
     (eeg, attention) = (headset.raw_value, headset.attention)
 
     global label
+    global currentAttention
     
     ts = time.time()
     data['timestamp'].append(ts)
     data['raw_value'].append(eeg)
     data['attention'].append(attention)
     data['label'].append(label)
+
+def print_seconds_elapsed():
+    # Print "second elapsed" every second
+    global stime
+    timeDiff = time.time()-stime
+    if timeDiff % 1 < 1/SAMPLING_FREQUENCY: 
+        print("seconds elapsed: " + str(int(timeDiff)))
 
 ##########################################################################
 ##########################################################################
@@ -85,7 +94,7 @@ if __name__ == "__main__":
 
     try:
         print("Starting...")
-        while (headset.poor_signal > 5):
+        while (headset.poor_signal > 5 or headset.attention == 0):
             # print("Headset signal noisy %d. Adjust the headset and the earclip." % (headset.poor_signal))
             time.sleep(0.1)
             
@@ -94,15 +103,12 @@ if __name__ == "__main__":
         trial_stime = time.time()
         headset.raw_value_handlers.append( on_raw )
         prevTime = 0
+        print(TARGETS[trial_permutation[trial_index]], TRIAL_DURATION/1000)
         while ((time.time()-stime)<secondsToSample):
             if headset.poor_signal > 5 :
                 print("Headset signal noisy %d. Adjust the headset and the earclip." % (headset.poor_signal))
 
-            # Print "second elapsed" every second
-            timeDiff = int(time.time()-stime)
-            if(timeDiff != prevTime) : 
-                print("seconds elapsed: " + str(timeDiff))
-                prevTime = timeDiff
+            # print_seconds_elapsed()
 
             # Track trial time and change label
             if time.time()-trial_stime < TRIAL_DURATION/1000:
@@ -113,6 +119,7 @@ if __name__ == "__main__":
                 trial_stime = time.time()
                 if trial_index < len(trial_permutation): # increment trial index to next trial
                     trial_index += 1
+                    print(TARGETS[trial_permutation[trial_index]], TRIAL_DURATION/1000)
 
             time.sleep(1/SAMPLING_FREQUENCY) # wait till the start of next sample
             pass
