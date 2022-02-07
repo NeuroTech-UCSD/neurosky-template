@@ -90,11 +90,22 @@ elif MODE == 'online':
 
 ## FUNCTIONS
 def on_raw(headset, rawvalue):
-    # Save values collected from the headset
+    '''
+    Save values collected from the headset
+    Inputs:
+        headset (obj) : argument provided by the headset
+        data (global dict) : where this function saves new datapoints
+        label (global int) : where this function takes the current label marker status
+    Output: 
+        one data point to each item of data
+    Examples:
+        >>> data = {'timestamp': [], 'raw_value': [], 'attention': [], 'label':[]}
+        >>> label = 0
+        >>> headset.raw_value_handlers.append(on_raw) # Start Collecting EEG
+    '''
     (eeg, attention) = (headset.raw_value, headset.attention)
 
     global label
-    global currentAttention
     
     ts = time.time()
     data['timestamp'].append(ts)
@@ -103,16 +114,33 @@ def on_raw(headset, rawvalue):
     data['label'].append(label)
 
 def print_seconds_elapsed():
-    # Print "second elapsed" every second
+    '''
+    Print "second elapsed" every second
+    Inputs:
+        START_TIME (global constant) : start time of the session
+        SAMPLING_FREQUENCY (global constant) : sampling frequency of headset
+    Output: 
+        console logging of seconds elapsed every second
+    '''
     global START_TIME
     timeDiff = time.time() - START_TIME
     if timeDiff % 1 < 1/SAMPLING_FREQUENCY: 
         print("seconds elapsed: " + str(int(timeDiff)))
 
 def update_label(trial_permutation):
-    # Track trial time and update the current label
-    # Will print_trial the current trial if starting the next trial
-    # TODO : when current label is updated, update offline collection GUI
+    '''
+    Track trial time and update the current label
+    Will print_trial the current trial if starting the next trial
+    When current label is updated, update offline collection GUI
+    Inputs:
+        trial_permutation (list of int) : the sequence of trials
+        label (global int) : where this function takes the current label marker status
+        trial_stime (global float) : the starting time of the current trial
+        trial_index (glonal int) : which trial in the trial permutation we are currently at
+    Output: 
+        - console logging of the current trial
+        - offline collection GUI update
+    '''
     global label
     global trial_stime
     global trial_index
@@ -139,14 +167,25 @@ def dummy_train():
     print('Training Complete!')
 
 def dummy_predict(data):
+    # change this function to a real online prediction function (if you need one)
     if data['attention'][-1] % 2 == 0:
         print('Cats > Dogs')
     else:
         print('Dogs > Cats')
 
 def update_offline_collection_gui(trial_permutation, trial_index, duration):
+    '''
+    Update offline collection GUI
+    Inputs:
+        trial_permutation (list of int) : the sequence of trials
+        win (global visual.Window) : psychopy window object
+        trial_index (int) : which trial in the trial permutation we are currently at
+        duration (int) : how long the trial is in ms
+    Output: 
+        - offline collection GUI update
+    Note: intended to be used when current label is updated
+    '''
     global win
-    # msg = visual.TextStim(win, text=u"\u00A1123")
     trial_text = '(' + str(TARGETS[trial_permutation[trial_index]]) + ', ' + str(duration) + ')'
     msg = visual.TextStim(win, text=trial_text)
     msg.draw()
