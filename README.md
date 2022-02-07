@@ -30,7 +30,7 @@ Starts the script
 
 These would be read by neurosky.py and turn into constants.
 
-`MODE` can be `full`, `online`, or `offline`. `full` would be running the entire experiment. `online` would skip data collection or model training if either already exists, `offline` will just run the offline session and stops once the data is collected.
+`MODE` can be `'full'`, `'online'`, or `'offline'`. `'full'` would be running the entire experiment. `'online'` would skip data collection or model training if either already exists, `'offline'` will just run the offline session and stops once the data is collected.
 
 `TRIAL_DURATION` is how long each trial lasts in ms.
 
