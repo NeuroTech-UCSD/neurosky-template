@@ -2,7 +2,9 @@
 Based on: https://github.com/D1o0g9s/EEGFaceDetection/blob/master/mindwave_code/CollectRawData.py
 Notes:
 - requires mindwave.py
-- change the line labeled "mac version" to run it on other OS
+- M1 macs don't seem to work now
+- change the line labeled "mac version" to run it on Windows
+- to run it on Windows, set up COM port and copy the number over
 - run by typing 'python neurosky.py' in the terminal or console
 - configure your experimental settings under SETTINGS
 - trial_permutations are randomly sampled from TARGETS by default
@@ -210,7 +212,8 @@ if __name__ == "__main__":
             'label':[]}
 
     print("Connecting...")
-    headset = mindwave.Headset('/dev/tty.MindWaveMobile-SerialPo') # mac version
+    # headset = mindwave.Headset('/dev/tty.MindWaveMobile-SerialPo') # mac version
+    headset = mindwave.Headset('COM6') # windows version. set up COM port first (see video)
     print("Connected!")
 
     print("Starting...")
