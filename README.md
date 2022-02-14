@@ -41,6 +41,7 @@ These would be read by neurosky.py and turn into constants.
 `TARGETS` maps trial type number to the verbal description
 
 ## Known Bug
+Doesn't seem to work with m1 mac.
 
-The psychopy window for EEG data collection does not close after the session is over. It would only close when the code itself terminates or when you Ctrl-C out of the script in the terminal. You can choose a different GUI app or frontend or break this file up into multiple files and use multithreading.
+The psychopy window for EEG data collection does not close after the session is over if you're running it on a mac. It would only close when the code itself terminates or when you Ctrl-C out of the script in the terminal. You can choose a different GUI app or frontend or break this file up into multiple files and use multithreading.
 
