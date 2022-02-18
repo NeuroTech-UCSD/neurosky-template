@@ -41,7 +41,7 @@ These would be read by neurosky.py and turn into constants.
 `TARGETS` maps trial type number to the verbal description
 
 ## Known Bug
-Doesn't seem to work with m1 mac.
+The installation process can be tricky, and the fact conda can't even find psychopy doesn't help either. So if you encounter obstacles when installing, you can install miniconda and swictch between pip and conda install the failed packages until all or most of the dependencies for psychopy are installed. Then you can try to run `pip install psychopy --no-deps` to see what packages are actually required when running `python neurosky.py`. Just keep installing those packages until the window pops up.
 
 The psychopy window for EEG data collection does not close after the session is over if you're running it on a mac. It would only close when the code itself terminates or when you Ctrl-C out of the script in the terminal. You can choose a different GUI app or frontend or break this file up into multiple files and use multithreading.
 
